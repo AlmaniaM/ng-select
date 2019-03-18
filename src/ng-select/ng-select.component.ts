@@ -170,6 +170,7 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
     private _pressedKeys: string[] = [];
     private _compareWith: CompareWithFn;
     private _clearSearchOnAdd: boolean;
+    private _dragSelectOptions: NgOption[] = [];
 
     private readonly _destroy$ = new Subject<void>();
     private readonly _keyPress$ = new Subject<string>();
@@ -295,6 +296,13 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
             this.open();
         } else {
             this.toggle();
+        }
+    }
+
+    handleOptionMouseDown() {
+        console.log('list: ', this._dragSelectOptions);
+        if (this.multiple && this._dragSelectOptions.length > 0) {
+            this.toggleItem(this._dragSelectOptions[this._dragSelectOptions.length - 1])
         }
     }
 
@@ -501,7 +509,13 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         this.focused = false;
     }
 
-    onItemHover(item: NgOption) {
+    onItemHover(item: NgOption, event: MouseEvent) {
+        if (this.multiple) {
+            const lastItem = this._handleDragOptionAdd(item);
+            if ( event.buttons === 1) {
+                this._handleDragCheck(item, lastItem);
+            }
+        }
         if (item.disabled) {
             return;
         }
@@ -789,6 +803,39 @@ export class NgSelectComponent implements OnDestroy, OnChanges, AfterViewInit, C
         } else {
             this.clearModel();
         }
+    }
+
+    private _handleDragCheck(item: NgOption, lastItem: NgOption): void {
+        if (this._isDragBack()) {
+            this.toggleItem(lastItem);
+            this.toggleItem(item);
+        } else {
+            this.toggleItem(item);
+        }
+    }
+
+    private _handleDragOptionAdd(item: NgOption): NgOption {
+        let lastItem;
+        if (this._dragSelectOptions.length < 2) {
+            if (this._dragSelectOptions.length === 0) {
+                lastItem = item;
+            } else {
+                lastItem = this._dragSelectOptions[0];
+            }
+            this._dragSelectOptions.push(item);
+        } else {
+            lastItem = this._dragSelectOptions[0];
+            this._dragSelectOptions = this._dragSelectOptions.slice(1, 2);
+            this._dragSelectOptions.push(item);
+        }
+        return lastItem;
+    }
+
+    private _isDragBack(): boolean {
+        if (this._dragSelectOptions.length < 2) {
+            return false;
+        }
+        return this._dragSelectOptions[0].label === this._dragSelectOptions[1].label;
     }
 
     private get _isTypeahead() {

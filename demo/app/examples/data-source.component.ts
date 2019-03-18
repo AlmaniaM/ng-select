@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
         ---js
         people$: Observable<Person[]>;
         ngOnInit() {
-            this.people$ = this.dataService.getPeople();
+            'this.people$ = this.dataService.getPeople();
         }
         ---
         ---html,true
