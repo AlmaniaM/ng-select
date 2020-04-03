@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { RouteViewerComponent } from './shared/route-viewer/route-viewer.component';
+import { CustomPositionExampleComponent } from './examples/custom-position-service-example/custom-position-service-example.component';
 
 export const appRoutes: Routes = [
     {
@@ -36,4 +37,9 @@ export const appRoutes: Routes = [
         data: { title: 'Append to element', examples: 'append-to' }
     },
     { path: 'grouping', component: RouteViewerComponent, data: { title: 'Grouping', examples: 'group' } },
+    { 
+        path: 'custom-positioning', 
+        component: CustomPositionExampleComponent, 
+        data: { title: 'Custom Positioning', examples: 'custom-positioning' } 
+    },
 ];

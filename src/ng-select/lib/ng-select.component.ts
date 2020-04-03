@@ -44,7 +44,7 @@ import {
 import { ConsoleService } from './console.service';
 import { isDefined, isFunction, isPromise, isObject } from './value-utils';
 import { ItemsList } from './items-list';
-import { NgOption, KeyCode } from './ng-select.types';
+import { NgOption, KeyCode, DropdownPosition } from './ng-select.types';
 import { newId } from './id';
 import { NgDropdownPanelComponent } from './ng-dropdown-panel.component';
 import { NgOptionComponent } from './ng-option.component';
@@ -53,7 +53,6 @@ import { NgSelectConfig } from './config.service';
 import { NgDropdownPanelService } from './ng-dropdown-panel.service';
 
 export const SELECTION_MODEL_FACTORY = new InjectionToken<SelectionModelFactory>('ng-select-selection-model');
-export type DropdownPosition = 'bottom' | 'top' | 'auto';
 export type AddTagFn = ((term: string) => any | Promise<any>);
 export type CompareWithFn = (a: any, b: any) => boolean;
 export type GroupValueFn = (key: string | object, children: any[]) => string | object;

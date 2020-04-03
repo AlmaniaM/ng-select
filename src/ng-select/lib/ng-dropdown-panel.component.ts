@@ -23,9 +23,10 @@ import { animationFrameScheduler, asapScheduler, fromEvent, merge, Subject } fro
 import { auditTime, takeUntil } from 'rxjs/operators';
 import { NgDropdownPanelService, PanelDimensions } from './ng-dropdown-panel.service';
 
-import { DropdownPosition } from './ng-select.component';
+import { DropdownPosition } from './ng-select.types';
 import { NgOption } from './ng-select.types';
 import { isDefined } from './value-utils';
+import { DropdownPlacement, NG_DROPDOWN_PLACEMENT_SERVICE } from './ng-dropdown-panel-placement.service';
 
 const TOP_CSS_CLASS = 'ng-select-top';
 const BOTTOM_CSS_CLASS = 'ng-select-bottom';
@@ -87,7 +88,8 @@ export class NgDropdownPanelComponent implements OnInit, OnChanges, OnDestroy {
         private _zone: NgZone,
         private _panelService: NgDropdownPanelService,
         _elementRef: ElementRef,
-        @Optional() @Inject(DOCUMENT) private _document: any
+        @Optional() @Inject(DOCUMENT) private _document: any,
+        @Inject(NG_DROPDOWN_PLACEMENT_SERVICE) private _dropdownPlacementService: DropdownPlacement
     ) {
         this._dropdown = _elementRef.nativeElement;
     }
@@ -403,16 +405,11 @@ export class NgDropdownPanelComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private _setOffset(parent: ClientRect, select: ClientRect) {
-        const delta = select.height;
-
-        if (this._currentPosition === 'top') {
-            const offsetBottom = parent.bottom - select.bottom;
-            this._dropdown.style.bottom = offsetBottom + delta + 'px';
-            this._dropdown.style.top = 'auto';
-        } else if (this._currentPosition === 'bottom') {
-            const offsetTop = select.top - parent.top;
-            this._dropdown.style.top = offsetTop + delta + 'px';
-            this._dropdown.style.bottom = 'auto';
-        }
+        const dropdownRects = this._dropdown.getBoundingClientRect();
+        const placementParams = this._dropdownPlacementService.getOffset(this._currentPosition, parent, select, dropdownRects);
+        this._dropdown.style.bottom = placementParams.bottom;
+        this._dropdown.style.top = placementParams.top;
+        this._dropdown.style.height = placementParams.height || this._dropdown.style.height;
+        this._dropdown.style.maxHeight = placementParams.maxHeight || this._dropdown.style.maxHeight;
     }
 }

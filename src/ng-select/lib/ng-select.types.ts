@@ -20,3 +20,5 @@ export enum KeyCode {
     ArrowDown = 40,
     Backspace = 8
 }
+
+export type DropdownPosition = 'bottom' | 'top' | 'auto';

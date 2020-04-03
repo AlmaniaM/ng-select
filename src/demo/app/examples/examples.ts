@@ -41,6 +41,7 @@ import { GroupSelectableExampleComponent } from './group-selectable-example/grou
 import { GroupSelectableHiddenExampleComponent } from './group-selectable-hidden-example/group-selectable-hidden-example.component';
 import { GroupChildrenExampleComponent } from './group-children-example/group-children-example.component';
 import { SearchEditableExampleComponent } from './search-editable-example/search-editable-example.component';
+import { CustomPositionExampleComponent } from './custom-position-service-example/custom-position-service-example.component';
 
 export interface Example {
     component: any;
@@ -219,5 +220,9 @@ export const EXAMPLE_COMPONENTS: { [key: string]: Example } = {
     'group-children-example': {
         component: GroupChildrenExampleComponent,
         title: 'Items with already grouped children array'
+    },
+    'custom-position-service-example': {
+        component: CustomPositionExampleComponent,
+        title: 'Custom positioning service'
     }
 };
